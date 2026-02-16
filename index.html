@@ -1,432 +1,381 @@
+
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="DreamMimic: Learning Visuomotor Whole-Body Loco-Manipulation via World Model">
+    <meta name="keywords" content="humanoid loco-manipulation, visuomotor control, world model, policy distillation, RSSM, Dreamer, contact-rich interaction, OMOMO">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DreamMimic: Learning Visuomotor Whole-Body Loco-Manipulation via World Model</title>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L6PYDPEBZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
 
-<head>
-  <meta charset="utf-8">
-  <meta name="description" content="ResMimic: From General Motion Tracking to Humanoid Whole-Body Loco-Manipulation via Residual Learning">
-  <meta name="keywords" content="Humanoid, Robotics, Loco-Manipulation, Reinforcement Learning, Residual Learning">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ResMimic: From General Motion Tracking to Humanoid Whole-Body Loco-Manipulation via Residual Learning</title>
+      function gtag() {
+        dataLayer.push(arguments);
+      }
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+      gtag('js', new Date());
 
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="https://ae-pic-a1.aliexpress-media.com/kf/A3c11170623aa4164841a98a392beef36m.png_960x960.png_.avif" type="image/avif">
-  <link rel="icon" href="https://ae-pic-a1.aliexpress-media.com/kf/A3c11170623aa4164841a98a392beef36m.png_960x960.png_.avif" type="image/png" fallback>
+      gtag('config', 'G-L6PYDPEBZZ');
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <style>
+      /* Keep animated title effect with paper colors. */
+      .dreammimic-title span {
+        background-size: 420% 420%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 1.8s ease-in-out infinite, titleGlow 1.2s ease-in-out infinite;
+      }
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
-</head>
+      .dreammimic-title .dream-word {
+        background-image: linear-gradient(
+          135deg,
+          rgb(110, 40, 95) 0%,
+          rgb(140, 60, 120) 45%,
+          rgb(210, 130, 185) 100%
+        );
+      }
 
-<body>
+      .dreammimic-title .mimic-word {
+        background-image: linear-gradient(
+          135deg,
+          rgb(35, 95, 135) 0%,
+          rgb(54, 125, 189) 45%,
+          rgb(130, 190, 240) 100%
+        );
+      }
 
-  <section class="hero">
-    <div class="hero-body">
-      <div class="container is-max-desktop">
-        <div class="columns is-centered">
-          <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">
-              <span class="gradient-text">ResMimic</span>: From General Motion Tracking to Humanoid Whole-Body Loco-Manipulation via Residual Learning
-            </h1>
+      @keyframes titleGlow {
+        0%, 100% {
+          filter: brightness(1) saturate(1);
+        }
+        50% {
+          filter: brightness(1.28) saturate(1.3);
+        }
+      }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="./static/js/index.js"></script>
+    <script src="./static/js/video_comparison.js"></script>
+  </head>
+  <body>
 
-            <div class="is-size-5 publication-authors">
-              <span class="author-block">
-                <a href="https://sihengz02.github.io/" target="_blank">Siheng Zhao</a><sup>1,2§</sup>,</span>
-              <span class="author-block">
-                <a href="https://yanjieze.com/" target="_blank">Yanjie Ze</a><sup>1,3§</sup>,</span>
-                <span class="author-block">
-                  <a href="https://yuewang.xyz/" target="_blank">Yue Wang</a><sup>2</sup>,</span>
-                  <span class="author-block">
-                    <a href="https://tml.stanford.edu/people/karen-liu/" target="_blank">C. Karen Liu</a><sup>1,3†</sup>,</span>
-              <span class="author-block">
-                <a href="https://people.eecs.berkeley.edu/~pabbeel/" target="_blank">Pieter Abbeel</a><sup>1,4†</sup>,</span>
-                  <span class="author-block">
-                    <a href="https://www.gshi.me/" target="_blank">Guanya Shi</a><sup>1,5†</sup>,</span>
-                    <span class="author-block">
-                      <a href="http://rockyduan.com/" target="_blank">Rocky Duan</a><sup>1†</sup>,</span>
-        </div>
-
-            <div class="is-size-5 publication-authors">
-              <span class="author-block"><sup>1</sup>Amazon FAR (Frontier AI & Robotics)</span>&nbsp;&nbsp;
-              <span class="author-block"><sup>2</sup>University of Southern California</span>&nbsp;&nbsp;
-              <span class="author-block"><sup>3</sup>Stanford University</span>&nbsp;&nbsp;
-              <span class="author-block"><sup>4</sup>UC Berkeley</span>&nbsp;&nbsp;
-              <span class="author-block"><sup>5</sup>Carnegie Mellon University</span>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
     </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://sjtuyinjie.github.io">
+        <span class="icon">
+            <i class="fas fa-home"></i>
+        </span>
+        </a>
 
-            <div class="is-size-6 publication-authors" style="margin-top: 0.5em;">
-              <span class="author-block"><sup>§</sup>Work done while interning at Amazon FAR</span>&nbsp;&nbsp;
-              <span class="author-block"><sup>†</sup>FAR Co-Lead</span>
-</div>
-
-
-            <div class="column has-text-centered">
-              <div class="publication-links">
-                <!-- PDF Link. -->
-                <span class="link-block">
-                  <a target="_blank" href="https://www.arxiv.org/abs/2510.05070"
-                     class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                        <i class="ai ai-arxiv"></i>
-                    </span>
-                    <span>arXiv</span>
-                  </a>
-                </span>
-                <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
-                <span class="link-block">
-                  <a target="_blank" href="file/ResMimic_paper.pdf"
-                    class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                    </span>
-                    <span>Paper</span>
-                  </a>
-                </span>
-                <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
-                <span class="link-block">
-                  <a target="_blank" href="https://www.youtube.com/watch?v=dadOH-TpbRk"
-                    class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                    </span>
-                    <span>Video</span>
-                  </a>
-                </span>
-                <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
-                <span class="link-block">
-                  <a target="_blank" href="https://x.com/SihengZhao/status/1975985531298476316"
-                    class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fab fa-twitter"></i>
-                    </span>
-                    <span>tl;dr</span>
-                  </a>
-                </span>
-                <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
-                <span class="link-block">
-                  <a target="_blank" href="" class="external-link button is-normal is-rounded is-dark" disabled>
-                    <span class="icon">
-                      <i class="fab fa-github"></i>
-                    </span>
-                    <span>Code (Coming Soon)</span>
-                  </a>
-                </span>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            More Research
+          </a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://github.com/SJTU-ViSYS/M2DGR">
+              M2DGR(ICRA2022&RAL2021)
+            </a>
+            <a class="navbar-item" href="https://github.com/SJTU-ViSYS/Ground-Fusion">
+              Ground-Fusion(ICRA2024)
+            </a>
+            <a class="navbar-item" href="https://github.com/sjtuyinjie/DAF">
+              DAF(IROS2024)
+            </a>
+            <a class="navbar-item" href="https://github.com/Joanna-HE/LIGO.">
+              LIGO(TRO2025&IROS2025)
+            </a>
+            <a class="navbar-item" href="https://delinqu.github.io/EN-SLAM/">
+              EN-SLAM(CVPR2024)
+            </a>
+            <a class="navbar-item" href="https://link.springer.com/article/10.1007/s10291-024-01623-9">
+              Innovation-KF(GPS Solutions2024)
+            </a>
+          </div>
         </div>
+      </div>
 
-        </div>
     </div>
-        </div>
-        </div>
-        </div>
-  </section>
-
-  <section class="hero teaser">
-    <div class="container is-max-desktop">
+  </nav>
+    <section class="hero">
       <div class="hero-body">
-        <div class="publication-video">
-          <iframe src="https://www.youtube-nocookie.com/embed/dadOH-TpbRk?autoplay=1&mute=1&loop=1" frameborder="0"
-            allow="autoplay; encrypted-media" allowfullscreen>
-          </iframe>
-        </div>
-        <br>
-        <h2 class="subtitle has-text-centered">
-          We present ResMimic, a two-stage residual framework that unleashes the power of pre-trained general motion tracking policy. 
-          It enables expressive whole-body loco-manipulation with payloads up to 5.5kg without task-specific design, generalizes across poses, and exhibits reactive behavior.
-        </h2>
-      </div>
-    </div>
-  </section>
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <h1 class="title is-1 publication-title"><span class="dreammimic-title"><span class="dream-word">Dream</span><span class="mimic-word">Mimic</span></span>: Learning Visuomotor Whole-Body Loco-Manipulation via World Model
+              </h1>
+              <div class="is-size-5 publication-authors">
+                <span class="author-block">
+                <a href="" target="_blank">DreamMimic Authors</a>
+                </span>
+              </div>
+              <div class="column is-full_width">
+                <h2 class="is-size-6">(Author list and affiliations will be updated.)</h2>
+              <!-- <h2 class="is-size-6">(* equal contribution)  (<span>&#8224;</span> corresponding author)</h2> -->
+            </div>
+              <div class="is-size-5 publication-authors">
+                <!-- <span class="author-block"><sup>*</sup>Equal Contribution</span>
+                <span class="author-block"><sup>#</sup>Corresponding Author</span> -->
+                <span class="author-block">Affiliations TBD</span>
 
-  <section class="section">
-    <div class="container is-max-desktop">
-      <!-- Abstract. -->
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Abstract</h2>
-          <div class="content has-text-justified">
-            Humanoid whole-body loco-manipulation promises transformative capabilities for daily service and warehouse tasks. 
-            While recent advances in general motion tracking (GMT) have enabled humanoids to reproduce diverse human motions, these policies lack the precision and object awareness required for loco-manipulation. 
-            To this end, we introduce <b>ResMimic</b>, a two-stage residual learning framework for precise and expressive humanoid control from human motion data. 
-            First, a GMT policy, trained on large-scale human-only motion, serves as a task-agnostic base for generating human-like whole-body movements. 
-            An efficient but precise residual policy is then learned to refine the GMT outputs to improve locomotion and incorporate object interaction. 
-            To further facilitate efficient training, we design (i) a point-cloud-based object tracking reward for smoother optimization, (ii) a contact reward that encourages accurate humanoid body-object interactions, and (iii) a curriculum-based virtual object controller to stabilize early training. 
-            We evaluate ResMimic in both simulation and on a real Unitree G1 humanoid. 
-            Results show substantial gains in task success, training efficiency, and robustness over strong baselines.
-            </div>
-        </div>
-    </div>
-      <!--/ Abstract. -->
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Method Overview</h2>
-      <div class="content has-text-centered">
-        <img src="static/images/method_v4.png" alt="Method Overview">
-      </div>
-    </div>
-  </section>
-
-  <!-- Summary -->
-  <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Expressive Whole-Body Loco-Manipulation</h2>
-
-      <div class="content has-text-centered">
-        <div class="columns is-multiline">
-          <!-- Row 1 -->
-          <div class="column is-12">
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/carry.mov" type="video/mp4">
-                Your browser does not support the video tag.
-                    </video>
-              <div class="video-overlay-upper-left">Carry Box onto Back (1x)</div>
-            </div>
-        </div>
-          <div class="column is-12">
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/kneel.mov" type="video/mp4">
-                Your browser does not support the video tag.
-                    </video>
-              <div class="video-overlay-upper-left">Kneel on One Knee & Lift Box (1x)</div>
-            </div>
-            </div>
-        </div>
-      </div>
-
-      <br>
-      <h2 class="title is-3 has-text-centered">Heavy Object with Whole-Body Contact</h2>
-      <div class="content has-text-centered">
-        <div class="columns is-multiline">
-          <!-- Top wide video -->
-          <div class="column is-12">
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/squat.mov" type="video/mp4">
-                Your browser does not support the video tag.
-                    </video>
-              <div class="video-overlay-upper-left">Squat & Lift Box with Whole-Body Contact (1x)</div>
-              <div class="video-overlay-bottom-right">4.5kg</div>
-            </div>
-        </div>
-          <!-- Bottom two side-by-side -->
-          <div class="column is-6">
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/chair1.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <div class="video-overlay"><h3>Lift Chair with Whole-Body Contact (1x)</h3></div>
-              <div class="video-overlay-bottom-right">4.5kg</div>
-            </div>
-          </div>
-          <div class="column is-6">
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/chair2.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <div class="video-overlay"><h3>Lift Chair with Whole-Body Contact (1x)</h3></div>
-              <div class="video-overlay-bottom-right">5.5kg</div>
-            </div>
-          </div>
-        </div>
-        <h4 class="title is-5 has-text-centered">Robustness Test</h2>
-        <div class="columns is-multiline">
-          <div class="column is-6">
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/chair_robust1.mov" type="video/mp4">
-                Your browser does not support the video tag.
-                    </video>
-              <div class="video-overlay"><h3>Lift Chair with Whole-Body Contact (1x)</h3></div>
-              <div class="video-overlay-bottom-right">4.5kg</div>
-            </div>
-        </div>
-          <div class="column is-6">
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/chair_robust2.mov" type="video/mp4">
-                Your browser does not support the video tag.
-                    </video>
-              <div class="video-overlay"><h3>Lift Chair with Whole-Body Contact (1x)</h3></div>
-              <div class="video-overlay-bottom-right">4.5kg</div>
+              </div>
+              <div class="column has-text-centered">
+                <div class="publication-links">
+                  <span class="link-block">
+                  <a href="#"
+                    class="external-link button is-normal is-rounded is-dark" target="_blank">
+                  <span class="icon">
+                  <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper (TBD)</span>
+                  </a>
+                  </span>
+                  <span class="link-block">
+                  <a href="#" class="external-link button is-normal is-rounded is-dark"
+                    target="_blank">
+                  <span class="icon">
+                  <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv (TBD)</span>
+                  </a>
+                  </span>
+                  <span class="link-block">
+                  <a href="#"
+                    class="external-link button is-normal is-rounded is-dark" target="_blank">
+                  <span class="icon">
+                  <i class="fas fa-video"></i>
+                  </span>
+                  <span>Video (TBD)</span>
+                  </a>
+                  </span>
+                  <span class="link-block">
+                  <a href="#"
+                    class="external-link button is-normal is-rounded is-dark" target="_blank">
+                  <span class="icon">
+                  <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (TBD)</span>
+                  </a>
+                  </span>
+                  <span class="link-block">
+                  <a href="#"
+                    class="external-link button is-normal is-rounded is-dark" target="_blank">
+                  <span class="icon">
+                  <i class="fas fa-cube"></i>
+                  </span>
+                  <span>Dataset (TBD)</span>
+                  </a>
+                  </span>
                 </div>
-            </div>
-        </div>
-      </div>
-
-      <br>
-      <h2 class="title is-3 has-text-centered">General Object Interaction</h2>
-      <div class="content has-text-centered">
-        <div class="columns is-multiline">
-          <!-- Bottom two side-by-side -->
-          <div class="column is-12">
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/sit_demo.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <div class="video-overlay-upper-left">Sit on Chair (1x)</div>
-            </div>
-          </div>
-          <div class="column is-6">
-            <h4 class="title is-5 has-text-centered">ResMimic (Success ✅)</h2>
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/sit.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <div class="video-overlay"><h3>Sit on Chair (1x)</h3></div>
-            </div>
-          </div>
-          <div class="column is-6">
-            <h4 class="title is-5 has-text-centered">Base Policy (Failure ❌)</h2>
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/sit_base_policy.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <div class="video-overlay"><h3>Sit on Chair (1x)</h3></div>
+              </div>
+              <div class="column has-text-centered" style="margin-top: 5px;">
+                <img src="./static/images/gf1.gif" alt="Overview Image" style="max-width: 40%; height: auto;">
+                <img src="./static/images/gf2.gif" alt="Overview Image" style="max-width: 34%; height: auto;">
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </section>
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <div class="notification has-text-weight-bold mb-6" 
+               style="background: linear-gradient(135deg, #f5f9ff 0%, #e1edff 100%);
+                      border-left: 4px solid #002D72; font-size: 0.92rem;">
+            <div class="is-flex is-align-items-center">
+              <span class="icon is-large mr-3" style="color: #0072CE;">
+                <i class="fas fa-bolt"></i>
+              </span>
+              <div>
+                <strong style="color: #002D72;">TL;DR:</strong> 
+                <span style="display: inline; white-space: normal; color: #333;">
+                  We present <strong>DreamMimic</strong>, a world-model-assisted framework that distills privileged teacher policies into <strong>vision-based humanoid whole-body loco-manipulation</strong>. A Dreamer-style RSSM is repurposed to learn <strong>predictive latent dynamics</strong> and provide <strong>multi-step supervision</strong> (latent alignment) to reduce long-horizon drift under partial observability. We further add a <strong>Reward Prediction Head</strong> and <strong>Interaction-Aware Prediction Heads</strong> (contact and object state) to shape interaction-relevant representations, and use a <strong>reward-conditioned teacher-mixing</strong> schedule for stable DAgger+RL training. Experiments on OMOMO show improved manipulation performance, robust vision-based control without privileged information, and consistent cross-simulator transfer across humanoid platforms.
 
-      <br>
-      <h2 class="title is-3 has-text-centered">Continuous Execution with MoCap Input</h2>
-      <div class="content has-text-centered">
-        <div class="columns is-multiline">
-          <!-- Bottom two side-by-side -->
-          
-          <div class="column is-6">
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/continuous1.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <div class="video-overlay"><h3>Lift Box with Random Object Initial Pose</h3></div>
+                </span>
+              </div>
             </div>
-          </div>
-          <div class="column is-6">
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/continuous2.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <div class="video-overlay"><h3>Autonomous Consecutive Lift Box</h3></div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <br>
-      <h2 class="title is-3 has-text-centered">Reactivate Behavior to External Perturbation</h2>
-
-      <div class="content has-text-centered">
-        <div class="columns is-multiline">
-          <!-- Row 1 -->
-          <div class="column is-12">
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/reactive.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-                    </video>
-            </div>
-        </div>
-        </div>
-      </div>
-  
-
-      <br>
-      <h2 class="title is-3 has-text-centered">Comparison with Baselines</h2>
-      <div class="content has-text-centered">
-        <div class="columns is-multiline">
-          <!-- Bottom two side-by-side -->
-          
-          <div class="column is-6">
-            <h4 class="title is-5 has-text-centered">ResMimic (Success ✅)</h2>
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/kneel.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          </div>
-          <div class="column is-6">
-            <h4 class="title is-5 has-text-centered">Base Policy (Failure ❌)</h2>
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/kneel_base_policy.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          </div>
-          <div class="column is-6">
-            <h4 class="title is-5 has-text-centered">Train from Scratch (Failure ❌)</h2>
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/kneel_scratch.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          </div>
-          <div class="column is-6">
-            <h4 class="title is-5 has-text-centered">Base Policy + Finetune (Failure ❌)</h2>
-            <div class="video-container-16-9">
-              <video autoplay loop muted loading="lazy" preload="none">
-                <source src="static/videos/kneel_finetune.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
 
-  <section class="section" id="BibTeX">
-    <div class="container is-max-desktop content">
-      <h2 class="title">BibTeX</h2>
-      <pre><code>@misc{zhao2025resmimicgeneralmotiontracking,
-        title={ResMimic: From General Motion Tracking to Humanoid Whole-body Loco-Manipulation via Residual Learning}, 
-        author={Siheng Zhao and Yanjie Ze and Yue Wang and C. Karen Liu and Pieter Abbeel and Guanya Shi and Rocky Duan},
-        year={2025},
-        eprint={2510.05070},
-        archivePrefix={arXiv},
-        primaryClass={cs.RO},
-        url={https://arxiv.org/abs/2510.05070}, 
-  }</code></pre>
-    </div>
-  </section>
-
-
-  <footer class="footer">
-    <div class="container">
-      <div class="columns is-centered">
-        <div class="column is-8">
-          <div class="content">
-            <p>
-              This website template is adapted from <a href="https://github.com/nerfies/nerfies.github.io" target="_blank">Nerfies</a>.
+            <h2 class="title is-3">Abstract</h2>
+            <div class="content has-text-justified">
+              <p>
+              Vision-based whole-body loco-manipulation on humanoid robots is challenging due to partial observability, contact-rich dynamics, and the difficulty of learning long-horizon behaviors from high-dimensional visual inputs. We present <strong style="color: #002D72;">DreamMimic</strong>, a framework that distills privileged teacher policies into vision-based humanoid controllers via world-model-assisted distillation. Instead of using a Dreamer-style RSSM for planning, we repurpose it to learn predictive latent dynamics that serve both as a representation space and a multi-step supervision signal, enabling latent alignment between teacher and student and substantially reducing long-horizon drift.
+              Beyond standard reconstruction objectives for proprioceptive and visual observations, we incorporate a <em>Reward Prediction Head</em> (RPH) that predicts the instantaneous task reward to anchor the latent state to task-relevant signals. Additionally, we propose <em>Interaction-Aware Prediction Heads</em> (IAPH) for contact and object state modeling. By supervising interaction cues that are difficult to infer from vision alone, IAPH promotes a latent space better aligned with the demands of contact-rich loco-manipulation, where accurate contact and object dynamics prediction is critical for long-horizon success.
+              We further introduce a reward-conditioned teacher-mixing schedule for DAgger+RL, which modulates teacher guidance using reward feedback to avoid premature annealing in challenging visual settings. Experiments on OMOMO demonstrate improved manipulation performance, robust vision-based control without privileged information, and consistent cross-simulator transfer across humanoid platforms.
             </p>
-                </div>
+
             </div>
+          </div>
         </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <h2 class="title is-3" style="margin-top: -20px">Framework Overview</h2>
+            <img src="./static/images/platform.png" class="center" style="width:85%; height:auto;">
+            <div class="content has-text-justified">
+              <p style="margin-top: 30px">
+                <b>DreamMimic overview (figure placeholder).</b> DreamMimic distills a privileged teacher into a vision-based student using a recurrent world model. The world model learns predictive latent dynamics and provides multi-step latent targets to stabilize long-horizon policy learning under partial observability. (Image will be updated.)
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <h2 class="title is-3" style="margin-top: -30px">World Model and Interaction-Aware Heads</h2>
+            <img src="./static/images/sensor_setup.jpg" class="center" style="width:80%; height:auto;">
+            <div class="content has-text-justified">
+              <p style="margin-top: 10px">
+                <b>Predictive representation learning (figure placeholder).</b> We repurpose a Dreamer-style RSSM to learn latent dynamics from visual and proprioceptive observations. Besides reconstruction, DreamMimic includes a Reward Prediction Head (RPH) and Interaction-Aware Prediction Heads (IAPH) for contact and object state prediction, encouraging the latent state to capture task-critical interaction cues. (Image will be updated.)
+              </p>
+            </div>
+            <div class="content has-text-justified">
+              <p style="margin-top: 0px">
+                <!-- <b>Overview of the system outputs</b> (ordered left to right, top to bottom): (1) reconstructed map comprised of 3D Gaussians, (2) RGB image rendered from a novel viewpoint, (3) sparse LiDAR point cloud map, (4) depth map rendered from the novel viewpoint, and (5) 3D mesh extracted from the Gaussian map. -->
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <h2 class="title is-3" style="margin-top: -30px">Experiments</h2>
+            <img src="./static/images/M3DGR_eval.png" class="center" style="width:90%; height:auto;">
+            <div class="content has-text-justified">
+              <p style="margin-top: 10px">
+                <b>Experimental results (figure placeholder).</b> We evaluate DreamMimic on OMOMO humanoid-object interaction tasks. Results show improved long-horizon manipulation performance and robust vision-based control without privileged information. We also observe consistent cross-simulator transfer across humanoid platforms. (Figure will be updated.)
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <h2 class="title is-3" style="margin-top: -30px">Highlights</h2>
+          
+            <img src="./static/images/gf1.gif" class="center">
+            <div class="content has-text-justified">
+              <p style="margin-top: 10px">
+                <b>Vision-based whole-body loco-manipulation.</b> DreamMimic learns to reproduce contact-rich humanoid-object interactions from vision and proprioception, mitigating long-horizon drift with multi-step latent supervision from a predictive world model. (Media will be updated.)
+              </p>
+            </div>
+            <div class="content has-text-justified">
+              <p style="margin-top: 30px">
+                
+              </p>
+            </div>
+            <img src="./static/images/mesh.gif" class="center" style="width:100%; height:auto;">
+            <img src="./static/images/rendering.jpg" class="center" style="width:60%; height:auto;">
+            <!-- <img src="./static/images/mesh.png" class="center"> -->
+            <div class="content has-text-justified">
+              <p style="margin-top: 10px">
+                <b>Interaction-aware predictive representations.</b> Reward- and interaction-aware auxiliary heads (RPH + IAPH) shape the latent space to better capture task-relevant signals such as contact transitions and object dynamics under partial observability. (Media will be updated.)
+              </p>
+            </div>
+            <div class="content has-text-justified">
+              <p style="margin-top: 30px">
+                
+              </p>
+            </div>
+            <img src="./static/images/logov3.png" class="center" style="width:70%; height:auto;">
+            <!-- <img src="./static/images/mesh.png" class="center"> -->
+            <div class="content has-text-justified">
+              <p style="margin-top: 10px">
+                <b>Stable training via reward-conditioned teacher mixing.</b> A reward-conditioned teacher-mixing schedule adapts the amount of teacher guidance during DAgger+RL, preventing premature annealing in challenging visual settings. (Figure will be updated.)
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <section class="section" id="BibTeX">
+      <div class="container is-max-desktop content">
+        <h2 class="title">BibTeX</h2>
+        <pre><code>@inproceedings{dreammimic2026,
+  title     = {DreamMimic: Learning Visuomotor Whole-Body Loco-Manipulation via World Model},
+  author    = {TBD},
+  booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  year      = {2026}
+}</code></pre>
+      </div>
+    </section>
+  </section>
+  <section class="section" id="RelatedWorks">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Related Works</h2>
+      <pre><code>@article{hafner2019dreamer,
+  title   = {Dream to Control: Learning Behaviors by Latent Imagination},
+  author  = {Hafner, Danijar and others},
+  journal = {arXiv},
+  year    = {2019}
+}
+
+@article{xu2025intermimic,
+  title   = {InterMimic: Scalable Teacher--Student Distillation for Humanoid--Object Interaction},
+  author  = {Xu, TBD and others},
+  journal = {arXiv},
+  year    = {2025}
+}</code></pre>
     </div>
-  </footer>
+  </section>
 
-</body>
-
+    <footer class="footer">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-8">
+            <div class="content">
+              <p>
+                This website is licensed under a <a rel="license"
+                  href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+              </p>
+              <p>
+                This website template is from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>. 
+                We sincerely thank <a href="https://keunhong.com/">Keunhong Park</a> for developing and open-sourcing this template. 
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>
