@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="ResMimic: From General Motion Tracking to Humanoid Whole-Body Loco-Manipulation via Residual Learning">
+  <meta name="keywords" content="Humanoid, Robotics, Loco-Manipulation, Reinforcement Learning, Residual Learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ResMimic: From General Motion Tracking to Humanoid Whole-Body Loco-Manipulation via Residual Learning</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="https://ae-pic-a1.aliexpress-media.com/kf/A3c11170623aa4164841a98a392beef36m.png_960x960.png_.avif" type="image/avif">
+  <link rel="icon" href="https://ae-pic-a1.aliexpress-media.com/kf/A3c11170623aa4164841a98a392beef36m.png_960x960.png_.avif" type="image/png" fallback>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">
+              <span class="gradient-text">ResMimic</span>: From General Motion Tracking to Humanoid Whole-Body Loco-Manipulation via Residual Learning
+            </h1>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://sihengz02.github.io/" target="_blank">Siheng Zhao</a><sup>1,2§</sup>,</span>
+              <span class="author-block">
+                <a href="https://yanjieze.com/" target="_blank">Yanjie Ze</a><sup>1,3§</sup>,</span>
+                <span class="author-block">
+                  <a href="https://yuewang.xyz/" target="_blank">Yue Wang</a><sup>2</sup>,</span>
+                  <span class="author-block">
+                    <a href="https://tml.stanford.edu/people/karen-liu/" target="_blank">C. Karen Liu</a><sup>1,3†</sup>,</span>
+              <span class="author-block">
+                <a href="https://people.eecs.berkeley.edu/~pabbeel/" target="_blank">Pieter Abbeel</a><sup>1,4†</sup>,</span>
+                  <span class="author-block">
+                    <a href="https://www.gshi.me/" target="_blank">Guanya Shi</a><sup>1,5†</sup>,</span>
+                    <span class="author-block">
+                      <a href="http://rockyduan.com/" target="_blank">Rocky Duan</a><sup>1†</sup>,</span>
+        </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Amazon FAR (Frontier AI & Robotics)</span>&nbsp;&nbsp;
+              <span class="author-block"><sup>2</sup>University of Southern California</span>&nbsp;&nbsp;
+              <span class="author-block"><sup>3</sup>Stanford University</span>&nbsp;&nbsp;
+              <span class="author-block"><sup>4</sup>UC Berkeley</span>&nbsp;&nbsp;
+              <span class="author-block"><sup>5</sup>Carnegie Mellon University</span>
+    </div>
+
+            <div class="is-size-6 publication-authors" style="margin-top: 0.5em;">
+              <span class="author-block"><sup>§</sup>Work done while interning at Amazon FAR</span>&nbsp;&nbsp;
+              <span class="author-block"><sup>†</sup>FAR Co-Lead</span>
+</div>
+
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a target="_blank" href="https://www.arxiv.org/abs/2510.05070"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
+                <span class="link-block">
+                  <a target="_blank" href="file/ResMimic_paper.pdf"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
+                <span class="link-block">
+                  <a target="_blank" href="https://www.youtube.com/watch?v=dadOH-TpbRk"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                    </span>
+                    <span>Video</span>
+                  </a>
+                </span>
+                <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
+                <span class="link-block">
+                  <a target="_blank" href="https://x.com/SihengZhao/status/1975985531298476316"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-twitter"></i>
+                    </span>
+                    <span>tl;dr</span>
+                  </a>
+                </span>
+                <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
+                <span class="link-block">
+                  <a target="_blank" href="" class="external-link button is-normal is-rounded is-dark" disabled>
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code (Coming Soon)</span>
+                  </a>
+                </span>
+        </div>
+
+        </div>
+    </div>
+        </div>
+        </div>
+        </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <div class="publication-video">
+          <iframe src="https://www.youtube-nocookie.com/embed/dadOH-TpbRk?autoplay=1&mute=1&loop=1" frameborder="0"
+            allow="autoplay; encrypted-media" allowfullscreen>
+          </iframe>
+        </div>
+        <br>
+        <h2 class="subtitle has-text-centered">
+          We present ResMimic, a two-stage residual framework that unleashes the power of pre-trained general motion tracking policy. 
+          It enables expressive whole-body loco-manipulation with payloads up to 5.5kg without task-specific design, generalizes across poses, and exhibits reactive behavior.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            Humanoid whole-body loco-manipulation promises transformative capabilities for daily service and warehouse tasks. 
+            While recent advances in general motion tracking (GMT) have enabled humanoids to reproduce diverse human motions, these policies lack the precision and object awareness required for loco-manipulation. 
+            To this end, we introduce <b>ResMimic</b>, a two-stage residual learning framework for precise and expressive humanoid control from human motion data. 
+            First, a GMT policy, trained on large-scale human-only motion, serves as a task-agnostic base for generating human-like whole-body movements. 
+            An efficient but precise residual policy is then learned to refine the GMT outputs to improve locomotion and incorporate object interaction. 
+            To further facilitate efficient training, we design (i) a point-cloud-based object tracking reward for smoother optimization, (ii) a contact reward that encourages accurate humanoid body-object interactions, and (iii) a curriculum-based virtual object controller to stabilize early training. 
+            We evaluate ResMimic in both simulation and on a real Unitree G1 humanoid. 
+            Results show substantial gains in task success, training efficiency, and robustness over strong baselines.
+            </div>
+        </div>
+    </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Method Overview</h2>
+      <div class="content has-text-centered">
+        <img src="static/images/method_v4.png" alt="Method Overview">
+      </div>
+    </div>
+  </section>
+
+  <!-- Summary -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Expressive Whole-Body Loco-Manipulation</h2>
+
+      <div class="content has-text-centered">
+        <div class="columns is-multiline">
+          <!-- Row 1 -->
+          <div class="column is-12">
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/carry.mov" type="video/mp4">
+                Your browser does not support the video tag.
+                    </video>
+              <div class="video-overlay-upper-left">Carry Box onto Back (1x)</div>
+            </div>
+        </div>
+          <div class="column is-12">
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/kneel.mov" type="video/mp4">
+                Your browser does not support the video tag.
+                    </video>
+              <div class="video-overlay-upper-left">Kneel on One Knee & Lift Box (1x)</div>
+            </div>
+            </div>
+        </div>
+      </div>
+
+      <br>
+      <h2 class="title is-3 has-text-centered">Heavy Object with Whole-Body Contact</h2>
+      <div class="content has-text-centered">
+        <div class="columns is-multiline">
+          <!-- Top wide video -->
+          <div class="column is-12">
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/squat.mov" type="video/mp4">
+                Your browser does not support the video tag.
+                    </video>
+              <div class="video-overlay-upper-left">Squat & Lift Box with Whole-Body Contact (1x)</div>
+              <div class="video-overlay-bottom-right">4.5kg</div>
+            </div>
+        </div>
+          <!-- Bottom two side-by-side -->
+          <div class="column is-6">
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/chair1.mov" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="video-overlay"><h3>Lift Chair with Whole-Body Contact (1x)</h3></div>
+              <div class="video-overlay-bottom-right">4.5kg</div>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/chair2.mov" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="video-overlay"><h3>Lift Chair with Whole-Body Contact (1x)</h3></div>
+              <div class="video-overlay-bottom-right">5.5kg</div>
+            </div>
+          </div>
+        </div>
+        <h4 class="title is-5 has-text-centered">Robustness Test</h2>
+        <div class="columns is-multiline">
+          <div class="column is-6">
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/chair_robust1.mov" type="video/mp4">
+                Your browser does not support the video tag.
+                    </video>
+              <div class="video-overlay"><h3>Lift Chair with Whole-Body Contact (1x)</h3></div>
+              <div class="video-overlay-bottom-right">4.5kg</div>
+            </div>
+        </div>
+          <div class="column is-6">
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/chair_robust2.mov" type="video/mp4">
+                Your browser does not support the video tag.
+                    </video>
+              <div class="video-overlay"><h3>Lift Chair with Whole-Body Contact (1x)</h3></div>
+              <div class="video-overlay-bottom-right">4.5kg</div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <br>
+      <h2 class="title is-3 has-text-centered">General Object Interaction</h2>
+      <div class="content has-text-centered">
+        <div class="columns is-multiline">
+          <!-- Bottom two side-by-side -->
+          <div class="column is-12">
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/sit_demo.mov" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="video-overlay-upper-left">Sit on Chair (1x)</div>
+            </div>
+          </div>
+          <div class="column is-6">
+            <h4 class="title is-5 has-text-centered">ResMimic (Success ✅)</h2>
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/sit.mov" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="video-overlay"><h3>Sit on Chair (1x)</h3></div>
+            </div>
+          </div>
+          <div class="column is-6">
+            <h4 class="title is-5 has-text-centered">Base Policy (Failure ❌)</h2>
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/sit_base_policy.mov" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="video-overlay"><h3>Sit on Chair (1x)</h3></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <h2 class="title is-3 has-text-centered">Continuous Execution with MoCap Input</h2>
+      <div class="content has-text-centered">
+        <div class="columns is-multiline">
+          <!-- Bottom two side-by-side -->
+          
+          <div class="column is-6">
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/continuous1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="video-overlay"><h3>Lift Box with Random Object Initial Pose</h3></div>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/continuous2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="video-overlay"><h3>Autonomous Consecutive Lift Box</h3></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <h2 class="title is-3 has-text-centered">Reactivate Behavior to External Perturbation</h2>
+
+      <div class="content has-text-centered">
+        <div class="columns is-multiline">
+          <!-- Row 1 -->
+          <div class="column is-12">
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/reactive.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+                    </video>
+            </div>
+        </div>
+        </div>
+      </div>
+  
+
+      <br>
+      <h2 class="title is-3 has-text-centered">Comparison with Baselines</h2>
+      <div class="content has-text-centered">
+        <div class="columns is-multiline">
+          <!-- Bottom two side-by-side -->
+          
+          <div class="column is-6">
+            <h4 class="title is-5 has-text-centered">ResMimic (Success ✅)</h2>
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/kneel.mov" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          <div class="column is-6">
+            <h4 class="title is-5 has-text-centered">Base Policy (Failure ❌)</h2>
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/kneel_base_policy.mov" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          <div class="column is-6">
+            <h4 class="title is-5 has-text-centered">Train from Scratch (Failure ❌)</h2>
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/kneel_scratch.mov" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          <div class="column is-6">
+            <h4 class="title is-5 has-text-centered">Base Policy + Finetune (Failure ❌)</h2>
+            <div class="video-container-16-9">
+              <video autoplay loop muted loading="lazy" preload="none">
+                <source src="static/videos/kneel_finetune.mov" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@misc{zhao2025resmimicgeneralmotiontracking,
+        title={ResMimic: From General Motion Tracking to Humanoid Whole-body Loco-Manipulation via Residual Learning}, 
+        author={Siheng Zhao and Yanjie Ze and Yue Wang and C. Karen Liu and Pieter Abbeel and Guanya Shi and Rocky Duan},
+        year={2025},
+        eprint={2510.05070},
+        archivePrefix={arXiv},
+        primaryClass={cs.RO},
+        url={https://arxiv.org/abs/2510.05070}, 
+  }</code></pre>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This website template is adapted from <a href="https://github.com/nerfies/nerfies.github.io" target="_blank">Nerfies</a>.
+            </p>
+                </div>
+            </div>
+        </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
