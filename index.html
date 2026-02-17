@@ -132,15 +132,9 @@
                 </span>
               </div>
               <div class="column is-full_width">
-                <h2 class="is-size-6">(Author list and affiliations will be updated.)</h2>
+                <h2 class="is-size-6">(Author list and affiliations are anonymous.)</h2>
               <!-- <h2 class="is-size-6">(* equal contribution)  (<span>&#8224;</span> corresponding author)</h2> -->
             </div>
-              <div class="is-size-5 publication-authors">
-                <!-- <span class="author-block"><sup>*</sup>Equal Contribution</span>
-                <span class="author-block"><sup>#</sup>Corresponding Author</span> -->
-                <span class="author-block">Affiliations TBD</span>
-
-              </div>
               <div class="column has-text-centered">
                 <div class="publication-links">
                   <span class="link-block">
@@ -176,7 +170,7 @@
                   <span class="icon">
                   <i class="fab fa-github"></i>
                   </span>
-                  <span>Code (TBD)</span>
+                  <span>Code (Will release upon acceptance)</span>
                   </a>
                   </span>
                   <span class="link-block">
@@ -190,10 +184,21 @@
                   </span>
                 </div>
               </div>
-              <div class="column has-text-centered" style="margin-top: 5px;">
-                <img src="./static/images/gf1.gif" alt="Overview Image" style="max-width: 40%; height: auto;">
-                <img src="./static/images/gf2.gif" alt="Overview Image" style="max-width: 34%; height: auto;">
-              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <h2 class="title is-3" style="margin-top: -20px">Overview</h2>
+            <img src="./static/images/teaser.png" class="center" style="width:85%; height:auto;">
+            <div class="content has-text-justified">
+              <p style="margin-top: 30px">
+                <!-- Description will be added here -->
+              </p>
             </div>
           </div>
         </div>
@@ -213,7 +218,7 @@
               <div>
                 <strong style="color: #002D72;">TL;DR:</strong> 
                 <span style="display: inline; white-space: normal; color: #333;">
-                  We present <strong>DreamMimic</strong>, a world-model-assisted framework that distills privileged teacher policies into <strong>vision-based humanoid whole-body loco-manipulation</strong>. A Dreamer-style RSSM is repurposed to learn <strong>predictive latent dynamics</strong> and provide <strong>multi-step supervision</strong> (latent alignment) to reduce long-horizon drift under partial observability. We further add a <strong>Reward Prediction Head</strong> and <strong>Interaction-Aware Prediction Heads</strong> (contact and object state) to shape interaction-relevant representations, and use a <strong>reward-conditioned teacher-mixing</strong> schedule for stable DAgger+RL training. Experiments on OMOMO show improved manipulation performance, robust vision-based control without privileged information, and consistent cross-simulator transfer across humanoid platforms.
+                  We present <strong>DreamMimic</strong>, a world-model-assisted framework that distills privileged teacher policies into <strong>vision-based humanoid whole-body loco-manipulation</strong>. 
 
                 </span>
               </div>
@@ -226,7 +231,8 @@
               <p>
               Vision-based whole-body loco-manipulation on humanoid robots is challenging due to partial observability, contact-rich dynamics, and the difficulty of learning long-horizon behaviors from high-dimensional visual inputs. We present <strong style="color: #002D72;">DreamMimic</strong>, a framework that distills privileged teacher policies into vision-based humanoid controllers via world-model-assisted distillation. Instead of using a Dreamer-style RSSM for planning, we repurpose it to learn predictive latent dynamics that serve both as a representation space and a multi-step supervision signal, enabling latent alignment between teacher and student and substantially reducing long-horizon drift.
               Beyond standard reconstruction objectives for proprioceptive and visual observations, we incorporate a <em>Reward Prediction Head</em> (RPH) that predicts the instantaneous task reward to anchor the latent state to task-relevant signals. Additionally, we propose <em>Interaction-Aware Prediction Heads</em> (IAPH) for contact and object state modeling. By supervising interaction cues that are difficult to infer from vision alone, IAPH promotes a latent space better aligned with the demands of contact-rich loco-manipulation, where accurate contact and object dynamics prediction is critical for long-horizon success.
-              We further introduce a reward-conditioned teacher-mixing schedule for DAgger+RL, which modulates teacher guidance using reward feedback to avoid premature annealing in challenging visual settings. Experiments on OMOMO demonstrate improved manipulation performance, robust vision-based control without privileged information, and consistent cross-simulator transfer across humanoid platforms.
+              We further introduce <em>Performance-Conditioned Guidance (PCG)</em>, a reward-driven adaptive distillation schedule that computes performance scores for both teacher and student to dynamically balance guidance and exploration. PCG prevents both premature teacher annealing and excessive teacher interference in challenging visual settings.
+              Experiments on OMOMO and BEHAVE dataset demonstrate improved manipulation performance, robust vision-based control without privileged information, and consistent cross-simulator transfer across humanoid platforms. Our results highlight world models as an effective mechanism for stabilizing visual policy distillation in complex humanoid behaviors. We will release the code to benefit the research community upon paper acceptance.
             </p>
 
             </div>
@@ -238,11 +244,11 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered has-text-centered">
           <div class="column is-full-width">
-            <h2 class="title is-3" style="margin-top: -20px">Framework Overview</h2>
-            <img src="./static/images/platform.png" class="center" style="width:85%; height:auto;">
+            <h2 class="title is-3" style="margin-top: -20px">Pipeline</h2>
+            <img src="./static/images/pipeline.png" class="center" style="width:75%; height:auto;">
             <div class="content has-text-justified">
               <p style="margin-top: 30px">
-                <b>DreamMimic overview (figure placeholder).</b> DreamMimic distills a privileged teacher into a vision-based student using a recurrent world model. The world model learns predictive latent dynamics and provides multi-step latent targets to stabilize long-horizon policy learning under partial observability. (Image will be updated.)
+                <!-- Description will be added here -->
               </p>
             </div>
           </div>
@@ -253,16 +259,11 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered has-text-centered">
           <div class="column is-full-width">
-            <h2 class="title is-3" style="margin-top: -30px">World Model and Interaction-Aware Heads</h2>
-            <img src="./static/images/sensor_setup.jpg" class="center" style="width:80%; height:auto;">
+            <h2 class="title is-3" style="margin-top: -30px">World Model</h2>
+            <img src="./static/images/world_model.png" class="center" style="width:80%; height:auto;">
             <div class="content has-text-justified">
               <p style="margin-top: 10px">
-                <b>Predictive representation learning (figure placeholder).</b> We repurpose a Dreamer-style RSSM to learn latent dynamics from visual and proprioceptive observations. Besides reconstruction, DreamMimic includes a Reward Prediction Head (RPH) and Interaction-Aware Prediction Heads (IAPH) for contact and object state prediction, encouraging the latent state to capture task-critical interaction cues. (Image will be updated.)
-              </p>
-            </div>
-            <div class="content has-text-justified">
-              <p style="margin-top: 0px">
-                <!-- <b>Overview of the system outputs</b> (ordered left to right, top to bottom): (1) reconstructed map comprised of 3D Gaussians, (2) RGB image rendered from a novel viewpoint, (3) sparse LiDAR point cloud map, (4) depth map rendered from the novel viewpoint, and (5) 3D mesh extracted from the Gaussian map. -->
+                <!-- Description will be added here -->
               </p>
             </div>
           </div>
@@ -277,7 +278,7 @@
             <img src="./static/images/M3DGR_eval.png" class="center" style="width:90%; height:auto;">
             <div class="content has-text-justified">
               <p style="margin-top: 10px">
-                <b>Experimental results (figure placeholder).</b> We evaluate DreamMimic on OMOMO humanoid-object interaction tasks. Results show improved long-horizon manipulation performance and robust vision-based control without privileged information. We also observe consistent cross-simulator transfer across humanoid platforms. (Figure will be updated.)
+                <b>Experimental results (figure placeholder).</b> We evaluate DreamMimic on OMOMO humanoid-object interaction tasks. Results show improved long-horizon manipulation performance and robust vision-based control without privileged information. We also observe consistent cross-simulator transfer across humanoid platforms. 
               </p>
             </div>
 
@@ -292,34 +293,18 @@
           <div class="column is-full-width">
             <h2 class="title is-3" style="margin-top: -30px">Highlights</h2>
           
-            <img src="./static/images/gf1.gif" class="center">
             <div class="content has-text-justified">
               <p style="margin-top: 10px">
-                <b>Vision-based whole-body loco-manipulation.</b> DreamMimic learns to reproduce contact-rich humanoid-object interactions from vision and proprioception, mitigating long-horizon drift with multi-step latent supervision from a predictive world model. (Media will be updated.)
+                <b>Vision-based whole-body loco-manipulation.</b> DreamMimic learns to reproduce contact-rich humanoid-object interactions from vision and proprioception, mitigating long-horizon drift with multi-step latent supervision from a predictive world model.
               </p>
             </div>
             <div class="content has-text-justified">
               <p style="margin-top: 30px">
-                
-              </p>
-            </div>
-            <img src="./static/images/mesh.gif" class="center" style="width:100%; height:auto;">
-            <img src="./static/images/rendering.jpg" class="center" style="width:60%; height:auto;">
-            <!-- <img src="./static/images/mesh.png" class="center"> -->
-            <div class="content has-text-justified">
-              <p style="margin-top: 10px">
-                <b>Interaction-aware predictive representations.</b> Reward- and interaction-aware auxiliary heads (RPH + IAPH) shape the latent space to better capture task-relevant signals such as contact transitions and object dynamics under partial observability. (Media will be updated.)
+                <b>Interaction-aware predictive representations.</b> Reward- and interaction-aware auxiliary heads (RPH + IAPH) shape the latent space to better capture task-relevant signals such as contact transitions and object dynamics under partial observability. 
               </p>
             </div>
             <div class="content has-text-justified">
               <p style="margin-top: 30px">
-                
-              </p>
-            </div>
-            <img src="./static/images/logov3.png" class="center" style="width:70%; height:auto;">
-            <!-- <img src="./static/images/mesh.png" class="center"> -->
-            <div class="content has-text-justified">
-              <p style="margin-top: 10px">
                 <b>Stable training via reward-conditioned teacher mixing.</b> A reward-conditioned teacher-mixing schedule adapts the amount of teacher guidance during DAgger+RL, preventing premature annealing in challenging visual settings. (Figure will be updated.)
               </p>
             </div>
@@ -332,14 +317,14 @@
         <h2 class="title">BibTeX</h2>
         <pre><code>@inproceedings{dreammimic2026,
   title     = {DreamMimic: Learning Visuomotor Whole-Body Loco-Manipulation via World Model},
-  author    = {TBD},
-  booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  author    = {Anonymous Authors},
+  booktitle = {TBD},
   year      = {2026}
 }</code></pre>
       </div>
     </section>
   </section>
-  <section class="section" id="RelatedWorks">
+  <!-- <section class="section" id="RelatedWorks">
     <div class="container is-max-desktop content">
       <h2 class="title">Related Works</h2>
       <pre><code>@article{hafner2019dreamer,
@@ -356,7 +341,7 @@
   year    = {2025}
 }</code></pre>
     </div>
-  </section>
+  </section> -->
 
     <footer class="footer">
       <div class="container">
