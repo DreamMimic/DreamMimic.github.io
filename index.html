@@ -64,6 +64,27 @@
           filter: brightness(1.28) saturate(1.3);
         }
       }
+
+      /* Video demo layout (keep consistent with Bulma/Nerfies look). */
+      .demo-grid .box {
+        height: 100%;
+      }
+      .demo-video {
+        width: 100%;
+        border-radius: 12px;
+        background: #000;
+        display: block;
+      }
+      .demo-caption {
+        margin-top: 0.75rem;
+        color: #4a4a4a;
+        font-size: 0.95rem;
+      }
+      .demo-meta {
+        margin-top: 0.35rem;
+        color: #7a7a7a;
+        font-size: 0.85rem;
+      }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script defer src="./static/js/fontawesome.all.min.js"></script>
@@ -156,12 +177,12 @@
                   </a>
                   </span>
                   <span class="link-block">
-                  <a href="#"
-                    class="external-link button is-normal is-rounded is-dark" target="_blank">
+                  <a href="#Videos"
+                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                   <i class="fas fa-video"></i>
                   </span>
-                  <span>Video (TBD)</span>
+                  <span>Video</span>
                   </a>
                   </span>
                   <span class="link-block">
@@ -287,6 +308,87 @@
       </div>
     </section>
 
+    <section class="section" id="Videos">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <h2 class="title is-3" style="margin-top: -30px">Video Demos</h2>
+            <div class="content has-text-justified">
+              <p style="margin-top: 10px">
+                The videos below present qualitative results of DreamMimic on <strong>long-horizon</strong> and <strong>contact-rich</strong> whole-body loco-manipulation. Overall, we use <strong>world-model-assisted distillation</strong> to transfer privileged teacher skills (e.g., interaction/object cues and rich visual signals such as depth/segmentation) into a student policy that operates from vision and proprioception, and we evaluate robustness across datasets, simulators, and platforms.
+              </p>
+            </div>
+
+            <div class="columns is-multiline demo-grid">
+              <div class="column is-half">
+                <div class="box has-text-left">
+                  <div class="title is-5 mb-2">SMPL-X Carrying a Box (Depth + Segmentation Inputs Shown)</div>
+                  <video class="demo-video" controls muted playsinline preload="metadata">
+                    <source src="./static/videos/box.mp4" type="video/mp4">
+                  </video>
+                  <div class="demo-caption">
+                    <strong>Box (SMPL-X)</strong>: the left panel visualizes depth and semantic segmentation inputs (for input/privilege reference), while the right panel shows the resulting interaction behavior. This task stresses long-horizon modeling of object dynamics and contact transitions under partial observability.
+                  </div>
+                </div>
+              </div>
+
+              <div class="column is-half">
+                <div class="box has-text-left">
+                  <div class="title is-5 mb-2">SMPL-X on OMOMO: Carrying a Chair</div>
+                  <video class="demo-video" controls muted playsinline preload="metadata">
+                    <source src="./static/videos/chair.mp4" type="video/mp4">
+                  </video>
+                  <div class="demo-caption">
+                    <strong>Chair (OMOMO, SMPL-X)</strong>: on the OMOMO human-object interaction benchmark, the policy must coordinate locomotion and manipulation, maintain stable hand-object contact, and regulate whole-body balance while transporting the chair.
+                  </div>
+                </div>
+              </div>
+
+              <div class="column is-half">
+                <div class="box has-text-left">
+                  <div class="title is-5 mb-2">SMPL-X on BEHAVE: Interacting with a Container</div>
+                  <video class="demo-video" controls muted playsinline preload="metadata">
+                    <source src="./static/videos/container.mp4" type="video/mp4">
+                  </video>
+                  <div class="demo-caption">
+                    <strong>Container (BEHAVE, SMPL-X)</strong>: in BEHAVE interaction scenes, the character performs contact-rich manipulation with a container. This setting highlights the need for interaction-aware state prediction and long-horizon stability in the learned representations.
+                  </div>
+                </div>
+              </div>
+
+              <div class="column is-half">
+                <div class="box has-text-left">
+                  <div class="title is-5 mb-2">G1 Carrying a Box (Cross-Platform / Cross-Simulator Transfer)</div>
+                  <video class="demo-video" controls muted playsinline preload="metadata">
+                    <source src="./static/videos/g1box.mp4" type="video/mp4">
+                  </video>
+                  <div class="demo-caption">
+                    <strong>G1-Box</strong>: we transfer the learned interaction skill to the G1 platform for box carrying, demonstrating cross-platform generalization and stable control under load and contact constraints (gait-manipulation coupling).
+                  </div>
+                </div>
+              </div>
+
+              <div class="column is-full">
+                <div class="box has-text-left">
+                  <div class="title is-5 mb-2">Isaac Sim / Isaac Lab: SMPL-X Sim2Sim Chair Lifting</div>
+                  <video class="demo-video" controls muted playsinline preload="metadata">
+                    <source src="./static/videos/isaaclab.mp4" type="video/mp4">
+                  </video>
+                  <div class="demo-caption">
+                    <strong>IsaacLab (SMPL-X Sim2Sim)</strong>: we demonstrate sim-to-sim transfer in Isaac Sim (Isaac Lab) for chair lifting, validating that world-model-assisted distillation preserves behavior quality and interaction stability across physics engines and rendering conditions.
+                  </div>
+                  <div class="demo-meta">
+                    Note: to reduce page load, videos use <code>preload="metadata"</code>. If you prefer auto-play loops, you can switch to <code>autoplay loop</code>.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section">
       <div class="container is-max-desktop">
         <div class="columns is-centered has-text-centered">
@@ -311,6 +413,7 @@
           </div>
         </div>
       </div>
+    </section>
 
     <section class="section" id="BibTeX">
       <div class="container is-max-desktop content">
@@ -323,7 +426,6 @@
 }</code></pre>
       </div>
     </section>
-  </section>
   <!-- <section class="section" id="RelatedWorks">
     <div class="container is-max-desktop content">
       <h2 class="title">Related Works</h2>
