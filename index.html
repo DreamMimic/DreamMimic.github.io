@@ -85,6 +85,12 @@
         color: #7a7a7a;
         font-size: 0.85rem;
       }
+      /* Slightly narrower featured video (used for Sim2Sim). */
+      .demo-video-narrow {
+        max-width: 820px;
+        margin-left: auto;
+        margin-right: auto;
+      }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script defer src="./static/js/fontawesome.all.min.js"></script>
@@ -261,6 +267,32 @@
         </div>
       </div>
     </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <h2 class="title is-3" style="margin-top: -30px">Contributions</h2>
+          
+            <div class="content has-text-justified">
+              <p style="margin-top: 10px">
+                <b>Vision-based whole-body loco-manipulation.</b> DreamMimic learns to reproduce contact-rich humanoid-object interactions from vision and proprioception, mitigating long-horizon drift with multi-step latent supervision from a predictive world model.
+              </p>
+            </div>
+            <div class="content has-text-justified">
+              <p style="margin-top: 30px">
+                <b>Interaction-aware predictive representations.</b> Reward- and interaction-aware auxiliary heads (RPH + IAPH) shape the latent space to better capture task-relevant signals such as contact transitions and object dynamics under partial observability. 
+              </p>
+            </div>
+            <div class="content has-text-justified">
+              <p style="margin-top: 30px">
+                <b>Stable training via reward-conditioned teacher mixing.</b> A reward-conditioned teacher-mixing schedule adapts the amount of teacher guidance during DAgger+RL, preventing premature annealing in challenging visual settings. (Figure will be updated.)
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="section">
       <div class="container is-max-desktop">
         <div class="columns is-centered has-text-centered">
@@ -291,23 +323,6 @@
         </div>
       </div>
     </section>
-    <section class="section">
-      <div class="container is-max-desktop">
-        <div class="columns is-centered has-text-centered">
-          <div class="column is-full-width">
-            <h2 class="title is-3" style="margin-top: -30px">Experiments</h2>
-            <img src="./static/images/M3DGR_eval.png" class="center" style="width:90%; height:auto;">
-            <div class="content has-text-justified">
-              <p style="margin-top: 10px">
-                <b>Experimental results (figure placeholder).</b> We evaluate DreamMimic on OMOMO humanoid-object interaction tasks. Results show improved long-horizon manipulation performance and robust vision-based control without privileged information. We also observe consistent cross-simulator transfer across humanoid platforms. 
-              </p>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section class="section" id="Videos">
       <div class="container is-max-desktop">
         <div class="columns is-centered has-text-centered">
@@ -371,45 +386,19 @@
               <div class="column is-full">
                 <div class="box has-text-left">
                   <div class="title is-5 mb-2">Sim2Sim: SMPL-X Chair Lifting in Isaac Sim</div>
-                  <video class="demo-video" controls muted playsinline preload="metadata">
+                  <video class="demo-video demo-video-narrow" controls muted playsinline preload="metadata">
                     <source src="./static/videos/isaaclab.mp4" type="video/mp4">
                   </video>
                   <div class="demo-caption">
                     <strong>Sim2Sim</strong>: we demonstrate sim-to-sim transfer in Isaac Sim for chair lifting, validating that world-model-assisted distillation preserves behavior quality and interaction stability across physics engines and rendering conditions.
                   </div>
                   <div class="demo-meta">
-                    Note: to reduce page load, videos use <code>preload="metadata"</code>. If you prefer auto-play loops, you can switch to <code>autoplay loop</code>.
+                    
                   </div>
                 </div>
               </div>
             </div>
 
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container is-max-desktop">
-        <div class="columns is-centered has-text-centered">
-          <div class="column is-full-width">
-            <h2 class="title is-3" style="margin-top: -30px">Highlights</h2>
-          
-            <div class="content has-text-justified">
-              <p style="margin-top: 10px">
-                <b>Vision-based whole-body loco-manipulation.</b> DreamMimic learns to reproduce contact-rich humanoid-object interactions from vision and proprioception, mitigating long-horizon drift with multi-step latent supervision from a predictive world model.
-              </p>
-            </div>
-            <div class="content has-text-justified">
-              <p style="margin-top: 30px">
-                <b>Interaction-aware predictive representations.</b> Reward- and interaction-aware auxiliary heads (RPH + IAPH) shape the latent space to better capture task-relevant signals such as contact transitions and object dynamics under partial observability. 
-              </p>
-            </div>
-            <div class="content has-text-justified">
-              <p style="margin-top: 30px">
-                <b>Stable training via reward-conditioned teacher mixing.</b> A reward-conditioned teacher-mixing schedule adapts the amount of teacher guidance during DAgger+RL, preventing premature annealing in challenging visual settings. (Figure will be updated.)
-              </p>
-            </div>
           </div>
         </div>
       </div>
