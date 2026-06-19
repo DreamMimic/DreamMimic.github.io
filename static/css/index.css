@@ -87,6 +87,18 @@ body {
   display: inline-block;
 }
 
+.conference-logo {
+  height: 120px;
+  width: auto;
+  display: inline-block;
+}
+
+.iros-logo {
+  display: block;
+  text-align: center;
+  margin: 0.5rem 0 1.25rem;
+}
+
 .publication-banner img {
 }
 
