@@ -3,8 +3,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="description" content="DreamMimic: Learning Visuomotor Whole-Body Loco-Manipulation via World Model">
-    <meta name="keywords" content="humanoid loco-manipulation, visuomotor control, world model, policy distillation, RSSM, Dreamer, contact-rich interaction, OMOMO">
+    <meta name="description" content="DreamMimic distills privileged teacher policies into vision-based humanoid loco-manipulation controllers via world-model-assisted distillation, with predictive RSSM latent dynamics, auxiliary interaction prediction, and Performance-Conditioned Guidance (PCG).">
+    <meta name="keywords" content="humanoid loco-manipulation, visuomotor control, world model, policy distillation, RSSM, Dreamer, contact-rich interaction, OMOMO, BEHAVE, Performance-Conditioned Guidance">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DreamMimic: Learning Visuomotor Whole-Body Loco-Manipulation via World Model</title>
       <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -157,7 +157,13 @@
                 <img src="./static/images/iros2026.png" alt="IROS 2026" class="conference-logo">
               </figure>
               <div class="is-size-4 publication-authors">
-                <span class="author-block">Jie Yin<sup>&#8224;</sup>, Xingyu Lai<sup>&#8224;</sup></span>
+                <span class="author-block">Jie Yin<sup>1,&#8224;</sup><sup>*</sup>, Xingyu Lai<sup>2,&#8224;</sup></span>
+              </div>
+              <div class="is-size-5 publication-authors">
+                <span class="author-block"><sup>1</sup>Shanghai Jiao Tong University, <sup>2</sup>Tsinghua University</span>
+              </div>
+              <div class="is-size-6">
+                <sup>*</sup>Corresponding author: Jie Yin. <sup>&#8224;</sup>Equal contribution.
               </div>
 
               <div class="column has-text-centered">
@@ -226,7 +232,7 @@
             <img src="./static/images/teaser.png" class="center" style="width:85%; height:auto;">
             <div class="content has-text-justified">
               <p style="margin-top: 30px">
-                <!-- Description will be added here -->
+                <strong>DreamMimic</strong> supports vision-based humanoid loco-manipulation through world-model-assisted policy distillation. Distilling privileged specialist teachers into a visual student enables whole-body interaction under partial observability (top left) and diverse behaviors (top right). The same framework transfers across morphologies, including SMPL-X and Unitree G1 (bottom left), and sustains long-horizon contact-rich loco-manipulation (bottom right).
               </p>
             </div>
           </div>
@@ -247,8 +253,7 @@
               <div>
                 <strong style="color: #002D72;">TL;DR:</strong> 
                 <span style="display: inline; white-space: normal; color: #333;">
-                  We present <strong>DreamMimic</strong>, a world-model-assisted framework that distills privileged teacher policies into <strong>vision-based humanoid whole-body loco-manipulation</strong>. 
-
+                  We present <strong>DreamMimic</strong>, a world-model-assisted framework that distills privileged teacher policies into <strong>vision-based humanoid whole-body loco-manipulation</strong> controllers via predictive RSSM latent dynamics, auxiliary interaction prediction, and <strong>Performance-Conditioned Guidance (PCG)</strong> for stable DAgger+RL distillation.
                 </span>
               </div>
             </div>
@@ -258,10 +263,10 @@
             <h2 class="title is-3">Abstract</h2>
             <div class="content has-text-justified">
               <p>
-              Vision-based whole-body loco-manipulation on humanoid robots is challenging due to partial observability, contact-rich dynamics, and the difficulty of learning long-horizon behaviors from high-dimensional visual inputs. We present <strong style="color: #002D72;">DreamMimic</strong>, a framework that distills privileged teacher policies into vision-based humanoid controllers via world-model-assisted distillation. Instead of using a Dreamer-style RSSM for planning, we repurpose it to learn predictive latent dynamics that serve both as a representation space and a multi-step supervision signal, enabling latent alignment between teacher and student and substantially reducing long-horizon drift.
-              Beyond standard reconstruction objectives for proprioceptive and visual observations, we incorporate a <em>Reward Prediction Head</em> (RPH) that predicts the instantaneous task reward to anchor the latent state to task-relevant signals. Additionally, we propose <em>Interaction-Aware Prediction Heads</em> (IAPH) for contact and object state modeling. By supervising interaction cues that are difficult to infer from vision alone, IAPH promotes a latent space better aligned with the demands of contact-rich loco-manipulation, where accurate contact and object dynamics prediction is critical for long-horizon success.
+              Vision-based whole-body loco-manipulation on humanoid robots is challenging due to partial observability, contact-rich dynamics, and the difficulty of learning long-horizon behaviors from high-dimensional visual inputs. We present <strong style="color: #002D72;">DreamMimic</strong>, a framework that distills privileged teacher policies into vision-based humanoid controllers via world-model-assisted distillation. Instead of using a Dreamer-style RSSM for planning, we repurpose it to learn predictive latent dynamics that serve as both a representation space and an action-conditioned multi-step supervision signal, while exposing compact predictive features to the student policy to reduce long-term drift.
+              Beyond standard reconstruction objectives for proprioceptive and visual observations, we add auxiliary prediction heads for privileged state, contact, object state, and reward estimation. These heads provide additional supervision related to agent&ndash;object interaction and task progress, encouraging the latent representation to retain signals that are useful for contact-rich loco-manipulation.
               We further introduce <em>Performance-Conditioned Guidance (PCG)</em>, a reward-driven adaptive distillation schedule that computes performance scores for both teacher and student to dynamically balance guidance and exploration. PCG prevents both premature teacher annealing and excessive teacher interference in challenging visual settings.
-              Experiments on OMOMO and BEHAVE dataset demonstrate improved manipulation performance, robust vision-based control without privileged information, and consistent cross-simulator transfer across humanoid platforms. Our results highlight world models as an effective mechanism for stabilizing visual policy distillation in complex humanoid behaviors. We will release the code to benefit the research community upon paper acceptance.
+              Experiments on OMOMO and BEHAVE show improved tracking-based loco-manipulation performance over strong vision-based baselines, without exposing online privileged interaction states to the student at deployment. Qualitative simulations further examine morphology and simulator changes. These results suggest that world models can provide a useful mechanism for stabilizing visual policy distillation in contact-rich humanoid behaviors.
             </p>
 
             </div>
@@ -278,17 +283,17 @@
           
             <div class="content has-text-justified">
               <p style="margin-top: 10px">
-                <b>Vision-based whole-body loco-manipulation.</b> DreamMimic learns to reproduce contact-rich humanoid-object interactions from vision and proprioception, mitigating long-horizon drift with multi-step latent supervision from a predictive world model.
+                <b>DreamMimic: a world-model-assisted framework for stable visual policy distillation.</b> DreamMimic mitigates compounding errors under partial observability by leveraging a Dreamer-style RSSM to learn predictive state representations and enforce multi-step action-conditioned latent alignment, enabling temporally coherent behaviors for contact-rich humanoid loco-manipulation.
               </p>
             </div>
             <div class="content has-text-justified">
               <p style="margin-top: 30px">
-                <b>Interaction-aware predictive representations.</b> Reward- and interaction-aware auxiliary heads (RPH + IAPH) shape the latent space to better capture task-relevant signals such as contact transitions and object dynamics under partial observability. 
+                <b>Structured supervision for stable DAgger+RL distillation.</b> We use auxiliary prediction heads to provide learning signals for reward, contact, and object dynamics, which help shape predictive representations for interaction-rich behaviors. Building on this supervision, <em>Performance-Conditioned Guidance</em> (PCG) adaptively modulates teacher involvement based on relative teacher&ndash;student performance, stabilizing policy optimization while avoiding premature guidance decay.
               </p>
             </div>
             <div class="content has-text-justified">
               <p style="margin-top: 30px">
-                <b>Stable training via reward-conditioned teacher mixing.</b> A reward-conditioned teacher-mixing schedule adapts the amount of teacher guidance during DAgger+RL, preventing premature annealing in challenging visual settings. (Figure will be updated.)
+                <b>Comprehensive simulation evaluation across datasets, humanoids, and simulators.</b> Quantitative experiments on OMOMO and BEHAVE report consistent improvements in loco-manipulation performance, while qualitative simulations on the Unitree G1 and in Isaac Sim provide preliminary evidence on morphology and simulator changes.
               </p>
             </div>
           </div>
@@ -303,7 +308,7 @@
             <img src="./static/images/pipeline.png" class="center" style="width:60%; height:auto;">
             <div class="content has-text-justified">
               <p style="margin-top: 30px">
-                <!-- Description will be added here -->
+                Multiple specialist teachers trained with privileged simulation observations are consolidated into a unified privileged teacher, which guides a vision-based student via <em>Performance-Conditioned Guidance</em> (PCG). PCG adaptively balances teacher supervision and student exploration according to their relative performance. The student operates on non-privileged proprioception, a compact goal condition, and world-model features inferred from depth and segmentation. The goal condition jointly describes the target object pose and short-horizon robot trajectory cues, while the world model supplies predictive interaction features and action-conditioned multi-step latent supervision. This design enables the policy to exploit both task-level goals and inferred interaction cues while reducing long-horizon drift.
               </p>
             </div>
           </div>
@@ -318,7 +323,7 @@
             <img src="./static/images/world_model.png" class="center" style="width:80%; height:auto;">
             <div class="content has-text-justified">
               <p style="margin-top: 10px">
-                <!-- Description will be added here -->
+                A Dreamer-style world model jointly learns predictive latent dynamics from visual and proprioceptive observations and provides action-conditioned multi-step latent targets to stabilize policy learning. The RSSM maintains deterministic and stochastic latent states, reconstructs visual and proprioceptive observations, and attaches auxiliary predictors for reward, privileged state, contact, and object state. At deployment, the student policy consumes the deterministic latent state and these auxiliary predictions rather than online privileged simulator states.
               </p>
             </div>
           </div>
@@ -332,19 +337,19 @@
             <h2 class="title is-3" style="margin-top: -30px">Video Demos</h2>
             <div class="content has-text-justified">
               <p style="margin-top: 10px">
-                The videos below present qualitative results of DreamMimic on <strong>long-horizon</strong> and <strong>contact-rich</strong> whole-body loco-manipulation. Overall, we use <strong>world-model-assisted distillation</strong> to transfer privileged teacher skills (e.g., interaction/object cues and rich visual signals such as depth/segmentation) into a student policy that operates from vision and proprioception, and we evaluate robustness across datasets, simulators, and platforms.
+                The videos below present qualitative results of DreamMimic on <strong>long-horizon</strong> and <strong>contact-rich</strong> whole-body loco-manipulation. DreamMimic distills privileged teacher skills into a vision-based student that operates on depth, segmentation, and proprioception. We evaluate behavior across datasets (OMOMO and BEHAVE), morphologies (SMPL-X and Unitree G1), and simulators (Isaac Gym to Isaac Sim).
               </p>
             </div>
 
             <div class="columns is-multiline demo-grid">
               <div class="column is-half">
                 <div class="box has-text-left">
-                  <div class="title is-5 mb-2">SMPL-X Carrying a Box (Depth + Segmentation Inputs Shown)</div>
+                  <div class="title is-5 mb-2">SMPL-X on OMOMO: Carrying a Box (Depth + Segmentation Inputs Shown)</div>
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/box.mp4" type="video/mp4">
                   </video>
                   <div class="demo-caption">
-                    <strong>Box (SMPL-X)</strong>: the left panel visualizes depth and semantic segmentation inputs, while the right panel shows the resulting interaction behavior. This task stresses long-horizon modeling of object dynamics and contact transitions under partial observability.
+                    <strong>Box (OMOMO, SMPL-X)</strong>: the left panel visualizes depth and semantic segmentation inputs, while the right panel shows the resulting interaction behavior. This OMOMO task stresses long-horizon modeling of object dynamics and contact transitions under partial observability.
                   </div>
                 </div>
               </div>
@@ -368,31 +373,31 @@
                     <source src="./static/videos/container.mp4" type="video/mp4">
                   </video>
                   <div class="demo-caption">
-                    <strong>Container (BEHAVE, SMPL-X)</strong>: in BEHAVE interaction scenes, the character performs contact-rich manipulation with a container. This setting highlights the need for interaction-aware state prediction and long-horizon stability in the learned representations.
+                    <strong>Container (BEHAVE, SMPL-X)</strong>: in BEHAVE interaction scenes, the character performs coordinated dragging and walking with sustained object contact. This setting highlights the need for interaction-aware state prediction and long-horizon stability in the learned representations.
                   </div>
                 </div>
               </div>
 
               <div class="column is-half">
                 <div class="box has-text-left">
-                  <div class="title is-5 mb-2">G1 Carrying a Box (Embodiment-Flexible)</div>
+                  <div class="title is-5 mb-2">Unitree G1: Pushing a Box (Cross-Embodiment)</div>
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/g1box.mp4" type="video/mp4">
                   </video>
                   <div class="demo-caption">
-                    <strong>G1-Box</strong>: we transfer the learned interaction skill to the G1 platform for box carrying, demonstrating cross-platform generalization and stable control under load and contact constraints (gait-manipulation coupling).
+                    <strong>G1-Box</strong>: we evaluate DreamMimic on the Unitree G1 humanoid (42 DoF) in simulation. The policy generates stable pushing behaviors with consistent balance and controlled object interaction, providing qualitative evidence for cross-embodiment adaptation.
                   </div>
                 </div>
               </div>
 
               <div class="column is-full">
                 <div class="box has-text-left">
-                  <div class="title is-5 mb-2">Sim2Sim: SMPL-X Chair Lifting in Isaac Sim</div>
+                  <div class="title is-5 mb-2">Sim2Sim: SMPL-X Interactions in Isaac Sim</div>
                   <video class="demo-video demo-video-narrow" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/isaaclab.mp4" type="video/mp4">
                   </video>
                   <div class="demo-caption">
-                    <strong>Sim2Sim</strong>: we demonstrate sim-to-sim transfer in Isaac Sim for chair lifting, validating that world-model-assisted distillation preserves behavior quality and interaction stability across physics engines and rendering conditions.
+                    <strong>Sim2Sim</strong>: we train policies in Isaac Gym and evaluate them in Isaac Lab under matched OMOMO sequences. DreamMimic performs stable whole-body interactions with a wooden chair and a large table, suggesting that the learned latent dynamics capture interaction-relevant structure across simulators.
                   </div>
                   <div class="demo-meta">
                     
