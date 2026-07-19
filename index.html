@@ -103,6 +103,26 @@
         background: #000;
         display: block;
       }
+      /* SMPL-X / G1: 1.5× center zoom, crop outer frame */
+      .demo-video-crop {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 6px;
+        background: #000;
+      }
+      .demo-video-crop .demo-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        transform: scale(1.5);
+        transform-origin: center center;
+        border-radius: 0;
+      }
       .demo-title {
         margin: 0 0 0.35rem;
         font-size: 0.82rem;
@@ -436,97 +456,121 @@
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">Chair · seq1</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_smplx_by_object/woodchair/seq1.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">Chair · seq2</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_smplx_by_object/woodchair/seq2.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">Table · seq1</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_smplx_by_object/largetable/seq1.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">Table · seq2</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_smplx_by_object/largetable/seq2.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">Large box · seq1</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_smplx_by_object/largebox/seq1.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">Large box · seq2</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_smplx_by_object/largebox/seq2.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">Plastic box · seq1</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_smplx_by_object/plasticbox/seq1.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">Plastic box · seq2</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_smplx_by_object/plasticbox/seq2.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">Small box · seq1</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_smplx_by_object/smallbox/seq1.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">Small box · seq2</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_smplx_by_object/smallbox/seq2.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">Suitcase · seq1</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_smplx_by_object/suitecase/seq1.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">Suitcase · seq2</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_smplx_by_object/suitecase/seq2.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
             </div>
@@ -545,65 +589,81 @@
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">G1 · Large box · seq1</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_g1_by_object/largebox/seq1.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">G1 · Large box · seq2</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_g1_by_object/largebox/seq2.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">G1 · Plastic box · seq1</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_g1_by_object/plasticbox/seq1.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">G1 · Plastic box · seq2</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_g1_by_object/plasticbox/seq2.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">G1 · Small box · seq1</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_g1_by_object/smallbox/seq1.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">G1 · Small box · seq2</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_g1_by_object/smallbox/seq2.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">G1 · Suitcase · seq1</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_g1_by_object/suitecase/seq1.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
               <div class="demo-cell">
                 <div class="demo-card">
                   <div class="demo-title">G1 · Suitcase · seq2</div>
+                  <div class="demo-video-crop">
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
                     <source src="./static/videos/new/student_g1_by_object/suitecase/seq2.mp4" type="video/mp4">
                   </video>
+                  </div>
                 </div>
               </div>
             </div>
