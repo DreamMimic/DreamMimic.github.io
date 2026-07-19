@@ -8,7 +8,7 @@ Logical order:
 
 Example:
   python scripts/make_overview_video.py
-  python scripts/make_overview_video.py --speed 2.5 --cell-duration 4
+  python scripts/make_overview_video.py --speed 1.0 --cell-duration 8
 """
 
 from __future__ import annotations
@@ -122,7 +122,8 @@ def _no_loop_pad(clip, duration: float):
 
 def fit_clip(path: Path, cell_w: int, cell_h: int, duration: float, speed: float):
     clip = VideoFileClip(str(path)).without_audio()
-    clip = clip.with_effects([vfx.MultiplySpeed(speed)])
+    if abs(speed - 1.0) > 1e-3:
+        clip = clip.with_effects([vfx.MultiplySpeed(speed)])
     clip = _no_loop_pad(clip, duration)
     tw, th = clip.size
     scale = max(cell_w / tw, cell_h / th)
@@ -136,7 +137,8 @@ def fit_clip(path: Path, cell_w: int, cell_h: int, duration: float, speed: float
 def fit_letterbox(path: Path, box_w: int, box_h: int, duration: float, speed: float):
     """Fit video inside box without cropping (letterbox)."""
     clip = VideoFileClip(str(path)).without_audio()
-    clip = clip.with_effects([vfx.MultiplySpeed(speed)])
+    if abs(speed - 1.0) > 1e-3:
+        clip = clip.with_effects([vfx.MultiplySpeed(speed)])
     clip = _no_loop_pad(clip, duration)
     tw, th = clip.size
     scale = min(box_w / tw, box_h / th)
@@ -413,7 +415,7 @@ def build(args):
     add_scene("Title", title_card(3.2))
 
     grid_duration = args.cell_duration
-    solo_duration = max(4.0, args.cell_duration)
+    solo_duration = max(6.0, args.cell_duration)
 
     # Narrative: perception -> SMPL-X -> G1 -> robustness (long-horizon + sim2sim)
     add_chapter(
@@ -537,9 +539,10 @@ def build(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=OUT_DEFAULT)
-    parser.add_argument("--speed", type=float, default=2.5)
-    # ~one playback after 2.5x (raw clips are ~8-10s). Longer pads with a freeze, never a loop.
-    parser.add_argument("--cell-duration", type=float, default=4.0)
+    parser.add_argument("--speed", type=float, default=1.0,
+                        help="Playback speed for source clips (1.0 = original).")
+    # ~one full playback at 1x (raw clips are typically ~8-10s). Longer pads with a freeze, never a loop.
+    parser.add_argument("--cell-duration", type=float, default=8.0)
     args = parser.parse_args()
     build(args)
 
