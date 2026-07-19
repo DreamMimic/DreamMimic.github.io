@@ -3,15 +3,12 @@
 
 Logical order:
   1) Title card
-  2) SMPL-X on OMOMO — 4x4 grid
-  3) Unitree G1 on OMOMO — 4x4 grid
-  4) Depth + segmentation (solo)
-  5) BEHAVE container (solo)
-  6) Sim2Sim Isaac Lab (solo)
+  2) Chapter cards + demos:
+     Perception -> SMPL-X -> Unitree G1 -> Long-horizon -> Sim2Sim
 
 Example:
   python scripts/make_overview_video.py
-  python scripts/make_overview_video.py --speed 2.5 --cell-duration 8
+  python scripts/make_overview_video.py --speed 2.5 --cell-duration 4
 """
 
 from __future__ import annotations
@@ -38,6 +35,15 @@ FPS = 24
 GAP = 6
 BANNER_H = 64
 PAD = 14
+CHAPTER_DUR = 1.75
+FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+FONT_BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+
+# Brand palette (paper / IROS page)
+BG = (14, 18, 28)
+NAVY = (0, 45, 114)
+ACCENT = (240, 193, 75)  # gold
+LINE = (70, 110, 160)
 
 # Prefer this object order for grids (matches OMOMO paper objects).
 OBJECT_ORDER = [
@@ -138,6 +144,170 @@ def fit_letterbox(path: Path, box_w: int, box_h: int, duration: float, speed: fl
     return clip
 
 
+def chapter_card(
+    index: int,
+    title: str,
+    subtitle: str,
+    duration: float = CHAPTER_DUR,
+):
+    """Premium interstitial between demo blocks."""
+    bg = ColorClip(size=(W, H), color=BG).with_duration(duration)
+    # Left brand rail
+    rail = ColorClip(size=(8, H), color=NAVY).with_duration(duration).with_position((0, 0))
+    # Soft mid panel
+    panel = (
+        ColorClip(size=(W, int(H * 0.42)), color=(22, 30, 46))
+        .with_opacity(0.55)
+        .with_duration(duration)
+        .with_position((0, int(H * 0.29)))
+    )
+    # Accent rule under title area
+    rule = (
+        ColorClip(size=(280, 3), color=ACCENT)
+        .with_duration(duration)
+        .with_position(((W - 280) // 2, int(H * 0.52)))
+    )
+    layers = [bg, rail, panel, rule]
+
+    try:
+        eyebrow = (
+            TextClip(
+                text=f"{index:02d}  /  CHAPTER",
+                font=FONT,
+                font_size=20,
+                color="#8FB4D9",
+                method="caption",
+                size=(W - 200, 36),
+                text_align="center",
+            )
+            .with_duration(duration)
+            .with_position(("center", H * 0.34))
+        )
+        main = (
+            TextClip(
+                text=title,
+                font=FONT_BOLD,
+                font_size=58,
+                color="white",
+                method="caption",
+                size=(W - 220, 90),
+                text_align="center",
+            )
+            .with_duration(duration)
+            .with_position(("center", H * 0.40))
+        )
+        sub = (
+            TextClip(
+                text=subtitle,
+                font=FONT,
+                font_size=24,
+                color="#B8D4F0",
+                method="caption",
+                size=(W - 280, 70),
+                text_align="center",
+            )
+            .with_duration(duration)
+            .with_position(("center", H * 0.56))
+        )
+        layers.extend([eyebrow, main, sub])
+    except Exception as e:
+        print(f"[warn] chapter_card TextClip failed: {e}")
+
+    card = CompositeVideoClip(layers, size=(W, H)).with_duration(duration)
+    return card.with_effects([vfx.FadeIn(0.28), vfx.FadeOut(0.28)])
+
+
+def title_card(duration: float = 3.2):
+    bg = ColorClip(size=(W, H), color=BG).with_duration(duration)
+    rail = ColorClip(size=(8, H), color=NAVY).with_duration(duration).with_position((0, 0))
+    rule = (
+        ColorClip(size=(220, 3), color=ACCENT)
+        .with_duration(duration)
+        .with_position(((W - 220) // 2, int(H * 0.57)))
+    )
+    layers = [bg, rail, rule]
+    try:
+        t1 = (
+            TextClip(
+                text="DreamMimic",
+                font=FONT_BOLD,
+                font_size=76,
+                color="white",
+                method="caption",
+                size=(W - 80, 100),
+                text_align="center",
+            )
+            .with_duration(duration)
+            .with_position(("center", H * 0.28))
+        )
+        t2 = (
+            TextClip(
+                text="Learning Visuomotor Whole-Body Loco-Manipulation via World Model",
+                font=FONT,
+                font_size=28,
+                color="#B8D4F0",
+                method="caption",
+                size=(W - 140, 90),
+                text_align="center",
+            )
+            .with_duration(duration)
+            .with_position(("center", H * 0.44))
+        )
+        t3 = (
+            TextClip(
+                text="Accepted to IROS 2026",
+                font=FONT,
+                font_size=30,
+                color="#F0C14B",
+                method="caption",
+                size=(W - 140, 50),
+                text_align="center",
+            )
+            .with_duration(duration)
+            .with_position(("center", H * 0.60))
+        )
+        layers.extend([t1, t2, t3])
+    except Exception as e:
+        print(f"[warn] title TextClip failed: {e}")
+    card = CompositeVideoClip(layers, size=(W, H)).with_duration(duration)
+    return card.with_effects([vfx.FadeIn(0.35), vfx.FadeOut(0.30)])
+
+
+def solo_scene(path: Path, caption: str, duration: float, speed: float):
+    """Full-frame solo clip with a top caption banner."""
+    bg = ColorClip(size=(W, H), color=BG).with_duration(duration)
+    banner = ColorClip(size=(W, BANNER_H), color=NAVY).with_duration(duration)
+    layers = [bg, banner.with_position((0, 0))]
+
+    try:
+        title = (
+            TextClip(
+                text=caption,
+                font=FONT,
+                font_size=32,
+                color="white",
+                method="caption",
+                size=(W - 40, BANNER_H - 10),
+                text_align="center",
+            )
+            .with_duration(duration)
+            .with_position((20, 10))
+        )
+        layers.append(title)
+    except Exception as e:
+        print(f"[warn] solo caption failed: {e}")
+
+    box_w = W - 2 * PAD
+    box_h = H - BANNER_H - 2 * PAD
+    clip = fit_letterbox(path, box_w, box_h, duration, speed)
+    cw, ch = clip.size
+    x = (W - cw) // 2
+    y = BANNER_H + PAD + (box_h - ch) // 2
+    layers.append(clip.with_position((x, y)))
+    scene = CompositeVideoClip(layers, size=(W, H)).with_duration(duration)
+    return scene.with_effects([vfx.FadeIn(0.22)])
+
+
 def grid_scene(
     picks: list[tuple[str, Path]],
     rows: int,
@@ -156,14 +326,15 @@ def grid_scene(
     cell_h = (usable_h - GAP * (rows - 1)) // rows
     label_h = 22
 
-    bg = ColorClip(size=(W, H), color=(18, 22, 30)).with_duration(duration)
-    banner = ColorClip(size=(W, BANNER_H), color=(0, 45, 114)).with_duration(duration)
+    bg = ColorClip(size=(W, H), color=BG).with_duration(duration)
+    banner = ColorClip(size=(W, BANNER_H), color=NAVY).with_duration(duration)
     layers = [bg, banner.with_position((0, 0))]
 
     try:
         title = (
             TextClip(
                 text=caption,
+                font=FONT,
                 font_size=32,
                 color="white",
                 method="caption",
@@ -201,6 +372,7 @@ def grid_scene(
             lbl = (
                 TextClip(
                     text=label_text,
+                    font=FONT,
                     font_size=14,
                     color="white",
                     method="caption",
@@ -214,87 +386,8 @@ def grid_scene(
         except Exception:
             pass
 
-    return CompositeVideoClip(layers, size=(W, H)).with_duration(duration)
-
-
-def title_card(duration: float = 3.2):
-    bg = ColorClip(size=(W, H), color=(18, 22, 30)).with_duration(duration)
-    layers = [bg]
-    try:
-        t1 = (
-            TextClip(
-                text="DreamMimic",
-                font_size=76,
-                color="white",
-                method="caption",
-                size=(W - 80, 100),
-                text_align="center",
-            )
-            .with_duration(duration)
-            .with_position(("center", H * 0.28))
-        )
-        t2 = (
-            TextClip(
-                text="Learning Visuomotor Whole-Body Loco-Manipulation via World Model",
-                font_size=28,
-                color="#B8D4F0",
-                method="caption",
-                size=(W - 140, 90),
-                text_align="center",
-            )
-            .with_duration(duration)
-            .with_position(("center", H * 0.44))
-        )
-        # ASCII-only: ImageMagick default fonts often garble Unicode arrows / dashes.
-        t3 = (
-            TextClip(
-                text="Accepted to IROS 2026",
-                font_size=30,
-                color="#F0C14B",
-                method="caption",
-                size=(W - 140, 50),
-                text_align="center",
-            )
-            .with_duration(duration)
-            .with_position(("center", H * 0.60))
-        )
-        layers.extend([t1, t2, t3])
-    except Exception as e:
-        print(f"[warn] title TextClip failed: {e}")
-    return CompositeVideoClip(layers, size=(W, H)).with_duration(duration)
-
-
-def solo_scene(path: Path, caption: str, duration: float, speed: float):
-    """Full-frame solo clip with a top caption banner."""
-    bg = ColorClip(size=(W, H), color=(18, 22, 30)).with_duration(duration)
-    banner = ColorClip(size=(W, BANNER_H), color=(0, 45, 114)).with_duration(duration)
-    layers = [bg, banner.with_position((0, 0))]
-
-    try:
-        title = (
-            TextClip(
-                text=caption,
-                font_size=32,
-                color="white",
-                method="caption",
-                size=(W - 40, BANNER_H - 10),
-                text_align="center",
-            )
-            .with_duration(duration)
-            .with_position((20, 10))
-        )
-        layers.append(title)
-    except Exception as e:
-        print(f"[warn] solo caption failed: {e}")
-
-    box_w = W - 2 * PAD
-    box_h = H - BANNER_H - 2 * PAD
-    clip = fit_letterbox(path, box_w, box_h, duration, speed)
-    cw, ch = clip.size
-    x = (W - cw) // 2
-    y = BANNER_H + PAD + (box_h - ch) // 2
-    layers.append(clip.with_position((x, y)))
-    return CompositeVideoClip(layers, size=(W, H)).with_duration(duration)
+    scene = CompositeVideoClip(layers, size=(W, H)).with_duration(duration)
+    return scene.with_effects([vfx.FadeIn(0.22)])
 
 
 def build(args):
@@ -311,14 +404,26 @@ def build(args):
         chapters.append((label, sum(s.duration for s in scenes)))
         scenes.append(clip)
 
+    def add_chapter(index: int, label: str, title: str, subtitle: str):
+        add_scene(
+            label,
+            chapter_card(index=index, title=title, subtitle=subtitle, duration=CHAPTER_DUR),
+        )
+
     add_scene("Title", title_card(3.2))
 
     grid_duration = args.cell_duration
     solo_duration = max(4.0, args.cell_duration)
 
     # Narrative: perception -> SMPL-X -> G1 -> robustness (long-horizon + sim2sim)
-    add_scene(
+    add_chapter(
+        1,
         "Perception",
+        "Perception Inputs",
+        "Depth and segmentation for world-model features",
+    )
+    add_scene(
+        "Perception demo",
         solo_scene(
             VIDEO_ROOT / "box.mp4",
             "Perception Inputs: Depth + Segmentation",
@@ -330,8 +435,14 @@ def build(args):
     smplx_picks = pick_grid(smplx, 16)
     if len(smplx_picks) < 16:
         print(f"[warn] only {len(smplx_picks)} unique SMPL-X clips; need 16")
-    add_scene(
+    add_chapter(
+        2,
         "SMPL-X",
+        "SMPL-X on OMOMO",
+        "Vision-based whole-body loco-manipulation",
+    )
+    add_scene(
+        "SMPL-X demo",
         grid_scene(
             smplx_picks,
             rows=4,
@@ -345,8 +456,14 @@ def build(args):
     g1_picks = pick_grid(g1, 16)
     if len(g1_picks) < 16:
         print(f"[warn] only {len(g1_picks)} unique G1 clips; need 16")
-    add_scene(
+    add_chapter(
+        3,
         "Unitree G1",
+        "Unitree G1",
+        "Cross-embodiment transfer on a 42-DoF humanoid",
+    )
+    add_scene(
+        "G1 demo",
         grid_scene(
             g1_picks,
             rows=4,
@@ -358,8 +475,14 @@ def build(args):
         ),
     )
 
-    add_scene(
+    add_chapter(
+        4,
         "Long-horizon",
+        "Long-horizon Tests",
+        "Sustained contact-rich interaction on BEHAVE",
+    )
+    add_scene(
+        "Long-horizon demo",
         solo_scene(
             VIDEO_ROOT / "container.mp4",
             "Robustness: Long-horizon (BEHAVE)",
@@ -368,8 +491,14 @@ def build(args):
         ),
     )
 
-    add_scene(
+    add_chapter(
+        5,
         "Sim2Sim",
+        "Sim2Sim Transfer",
+        "Isaac Gym to Isaac Lab under matched sequences",
+    )
+    add_scene(
+        "Sim2Sim demo",
         solo_scene(
             VIDEO_ROOT / "isaaclab.mp4",
             "Robustness: Sim2Sim (Isaac Gym -> Isaac Lab)",
