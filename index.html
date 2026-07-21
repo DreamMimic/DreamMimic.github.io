@@ -430,14 +430,73 @@
           <div class="column is-full-width">
             <h2 class="title is-3" style="margin-top: -30px">Perception Inputs</h2>
             <p class="demo-section-note">The vision student never sees privileged simulator states online; depth and segmentation drive the world-model features used by the policy.</p>
-            <div class="demo-grid" style="justify-content:center;">
-              <div class="demo-cell-3">
+            <h3 class="demo-section-title">SMPL-X · Depth + Segmentation</h3>
+            <div class="demo-grid">
+              <div class="demo-cell">
                 <div class="demo-card">
-                  <div class="demo-title">Depth + Segmentation</div>
+                  <div class="demo-title">Large box</div>
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
-                    <source src="./static/videos/box.mp4" type="video/mp4">
+                    <source src="./static/videos/smpl_vision/seq1.mp4" type="video/mp4">
                   </video>
-                  <div class="demo-caption">Rollout with the egocentric depth / segmentation stream the student actually consumes.</div>
+                </div>
+              </div>
+              <div class="demo-cell">
+                <div class="demo-card">
+                  <div class="demo-title">Plastic box</div>
+                  <video class="demo-video" autoplay loop muted playsinline preload="metadata">
+                    <source src="./static/videos/smpl_vision/seq2.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+              <div class="demo-cell">
+                <div class="demo-card">
+                  <div class="demo-title">Suitcase</div>
+                  <video class="demo-video" autoplay loop muted playsinline preload="metadata">
+                    <source src="./static/videos/smpl_vision/seq3.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+              <div class="demo-cell">
+                <div class="demo-card">
+                  <div class="demo-title">Chair</div>
+                  <video class="demo-video" autoplay loop muted playsinline preload="metadata">
+                    <source src="./static/videos/smpl_vision/seq4.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+            </div>
+            <h3 class="demo-section-title">Unitree G1 · Depth + Segmentation</h3>
+            <div class="demo-grid">
+              <div class="demo-cell">
+                <div class="demo-card">
+                  <div class="demo-title">Large box</div>
+                  <video class="demo-video" autoplay loop muted playsinline preload="metadata">
+                    <source src="./static/videos/g1_vision/seq1.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+              <div class="demo-cell">
+                <div class="demo-card">
+                  <div class="demo-title">Plastic box</div>
+                  <video class="demo-video" autoplay loop muted playsinline preload="metadata">
+                    <source src="./static/videos/g1_vision/seq2.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+              <div class="demo-cell">
+                <div class="demo-card">
+                  <div class="demo-title">Small box</div>
+                  <video class="demo-video" autoplay loop muted playsinline preload="metadata">
+                    <source src="./static/videos/g1_vision/seq3.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+              <div class="demo-cell">
+                <div class="demo-card">
+                  <div class="demo-title">Suitcase</div>
+                  <video class="demo-video" autoplay loop muted playsinline preload="metadata">
+                    <source src="./static/videos/g1_vision/seq4.mp4" type="video/mp4">
+                  </video>
                 </div>
               </div>
             </div>
@@ -683,18 +742,37 @@
                 <div class="demo-card">
                   <div class="demo-title">Long-horizon · BEHAVE</div>
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
-                    <source src="./static/videos/container.mp4" type="video/mp4">
+                    <source src="./static/videos/container2.mp4" type="video/mp4">
                   </video>
                   <div class="demo-caption">Sustained container interaction with walking under continuous contact.</div>
                 </div>
               </div>
+            </div>
+            <h3 class="demo-section-title">Sim2Sim · Isaac Gym → Isaac Lab</h3>
+            <p class="demo-section-note">Matched OMOMO sequences after simulator change.</p>
+            <div class="demo-grid">
               <div class="demo-cell-3">
                 <div class="demo-card">
-                  <div class="demo-title">Sim2Sim · Isaac Gym -&gt; Isaac Lab</div>
+                  <div class="demo-title">Isaac Lab · seq1</div>
                   <video class="demo-video" autoplay loop muted playsinline preload="metadata">
-                    <source src="./static/videos/isaaclab.mp4" type="video/mp4">
+                    <source src="./static/videos/lab1.mp4" type="video/mp4">
                   </video>
-                  <div class="demo-caption">Matched OMOMO chair / table sequences after simulator change.</div>
+                </div>
+              </div>
+              <div class="demo-cell-3">
+                <div class="demo-card">
+                  <div class="demo-title">Isaac Lab · seq2</div>
+                  <video class="demo-video" autoplay loop muted playsinline preload="metadata">
+                    <source src="./static/videos/lab2.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+              <div class="demo-cell-3">
+                <div class="demo-card">
+                  <div class="demo-title">Isaac Lab · seq3</div>
+                  <video class="demo-video" autoplay loop muted playsinline preload="metadata">
+                    <source src="./static/videos/lab3.mp4" type="video/mp4">
+                  </video>
                 </div>
               </div>
             </div>
